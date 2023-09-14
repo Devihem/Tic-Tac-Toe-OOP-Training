@@ -1,4 +1,4 @@
-# Tic-Tac-Toe Training Project
+# Tic-Tac-Toe OOP Training Project
 
 📑 **About:**
 
