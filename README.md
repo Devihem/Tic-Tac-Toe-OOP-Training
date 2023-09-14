@@ -17,7 +17,7 @@ If no player wins and the board is full, the game is considered a draw.*
 
 - Players can be 2 or more
 - Grid size can be 3x3 or bigger
-- [ ] AI - Players
+- TODO AI - Players
       
 ---
 
