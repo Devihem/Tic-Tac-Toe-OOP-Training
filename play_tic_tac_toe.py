@@ -1,27 +1,60 @@
+import random
 from players import Players
 
 
 class PlayTicTacToe:
     SIZE_OF_GRID = 0
     NUMBER_OF_PLAYERS = 0
-
-    # NUMBER_OF_AI = 0
+    NUMBER_OF_AI = 0
 
     def __init__(self):
-        self.players = ()
+        self.players = None  # obj
         self.board = []
+
+    @staticmethod
+    def welcome_text():
+        print("\n\n"
+              "\n---------------------------------Welcome-to-my-mini-project----------------------------------"
+              "\n   ______    ____   ______         ______    ___      ______         ______   ____     ______"
+              "\n  /_  __/   /  _/  / ____/        /_  __/   /   |    / ____/        /_  __/  / __ \\   / ____/"
+              "\n   / /      / /   / /              / /     / /| |   / /              / /    / / / /  / __/   "
+              "\n  / /     _/ /   / /___           / /     / ___ |  / /___           / /    / /_/ /  / /___   "
+              "\n /_/     /___/   \\____/          /_/     /_/  |_|  \\____/          /_/     \\____/  /_____/  "
+              "\n----------------------------------------------------------------------------------------------"
+              "\n\n")
+
+    @staticmethod
+    def user_int_input_selecting(input_text, error_text, minimum_value):
+        while True:
+            try:
+                value_size = int(input(input_text))
+
+                if value_size < minimum_value:
+                    raise ValueError
+
+                return value_size
+
+            except ValueError:
+                print(error_text)
+                continue
 
     def playing_phase(self):
         max_moves = self.SIZE_OF_GRID ** 2
         made_moves = 0
 
+        all_players = self.players.human_players + self.players.ai_players
+        random.shuffle(all_players)
+
         while True:
 
-            for player in self.players.players_tuple:
+            for player in all_players:
 
                 self.board_print()
 
-                row, col = self.user_token_loc_selecting(player)
+                if player in self.players.ai_players:
+                    row, col = self.ai_choose_location()
+                else:
+                    row, col = self.human_choose_location(player)
 
                 self.board[row][col] = player
 
@@ -30,11 +63,49 @@ class PlayTicTacToe:
                 if self.winner_check():
                     print(f"\n\n--------- We have a winner !---------\n"
                           f"     Player with symbol " + "\033[32m" + f"{player}" + "\033[0m" + " WIN !\n\n")
+                    return
 
                 elif max_moves == made_moves:
                     print("\n\nNo more moves.\nGame is DRAW !\n\n")
 
-    def user_token_loc_selecting(self, player):
+                    return
+
+    def board_print(self):
+        list_with_indexes_top = ['']
+
+        for numb in range(self.SIZE_OF_GRID):
+            str_numb = str(numb + 1)
+            str_numb = ' ' * (4 - len(str_numb)) + str_numb
+
+            list_with_indexes_top.append(str_numb)
+
+        # Top frame
+        print('┌──' + '──┬──' * self.SIZE_OF_GRID + '──┐')
+
+        # Index Top
+        print('│    ' + '│'.join(list_with_indexes_top) + '│')
+
+        # Mid Rows
+        counter = 0
+        for row in self.board:
+            counter += 1
+            str_counter = str(counter)
+            str_counter = ' ' * (4 - len(str_counter)) + str_counter
+            print_row = [' ' * (4 - len(el)) + el for el in row]
+            print('├──' + '──┼──' * self.SIZE_OF_GRID + '──┤')
+            print('│' + '│'.join([str_counter] + print_row) + '│')
+
+        # Bottom frame
+        print('└──' + '──┴──' * self.SIZE_OF_GRID + '──┘\n')
+
+    def ai_choose_location(self):
+        while True:
+            row = random.randint(0, self.SIZE_OF_GRID - 1)
+            col = random.randint(0, self.SIZE_OF_GRID - 1)
+            if self.board[row][col] == "":
+                return row, col
+
+    def human_choose_location(self, player):
 
         while True:
 
@@ -94,21 +165,6 @@ class PlayTicTacToe:
             return True
 
     @staticmethod
-    def user_int_input_selecting(input_text, error_text, minimum_value):
-        while True:
-            try:
-                value_size = int(input(input_text))
-
-                if value_size < minimum_value:
-                    raise ValueError
-
-                return value_size
-
-            except ValueError:
-                print(error_text)
-                continue
-
-    @staticmethod
     def another_game_select():
         while True:
             try:
@@ -125,46 +181,6 @@ class PlayTicTacToe:
                 print("Incorrect input! [Expected Y or N]\n\n")
                 continue
 
-    @staticmethod
-    def welcome_text():
-        print("\n\n"
-              "\n---------------------------------Welcome-to-my-mini-project----------------------------------"
-              "\n   ______    ____   ______         ______    ___      ______         ______   ____     ______"
-              "\n  /_  __/   /  _/  / ____/        /_  __/   /   |    / ____/        /_  __/  / __ \\   / ____/"
-              "\n   / /      / /   / /              / /     / /| |   / /              / /    / / / /  / __/   "
-              "\n  / /     _/ /   / /___           / /     / ___ |  / /___           / /    / /_/ /  / /___   "
-              "\n /_/     /___/   \\____/          /_/     /_/  |_|  \\____/          /_/     \\____/  /_____/  "
-              "\n----------------------------------------------------------------------------------------------"
-              "\n\n")
-
-    def board_print(self):
-        list_with_indexes_top = ['']
-
-        for numb in range(self.SIZE_OF_GRID):
-            str_numb = str(numb + 1)
-            str_numb = ' ' * (4 - len(str_numb)) + str_numb
-
-            list_with_indexes_top.append(str_numb)
-
-        # Top frame
-        print('┌──' + '──┬──' * self.SIZE_OF_GRID + '──┐')
-
-        # Index Top
-        print('│    ' + '│'.join(list_with_indexes_top) + '│')
-
-        # Mid Rows
-        counter = 0
-        for row in self.board:
-            counter += 1
-            str_counter = str(counter)
-            str_counter = ' ' * (4 - len(str_counter)) + str_counter
-            print_row = [' ' * (4 - len(el)) + el for el in row]
-            print('├──' + '──┼──' * self.SIZE_OF_GRID + '──┤')
-            print('│' + '│'.join([str_counter] + print_row) + '│')
-
-        # Bottom frame
-        print('└──' + '──┴──' * self.SIZE_OF_GRID + '──┘\n')
-
     def run(self):
         self.welcome_text()
 
@@ -174,11 +190,16 @@ class PlayTicTacToe:
             minimum_value=3)
 
         self.NUMBER_OF_PLAYERS = self.user_int_input_selecting(
-            input_text="Please select how many players will participate:\n-> ",
+            input_text="Please select how many total players will participate:\n-> ",
             error_text="Incorrect input! [Expected integer with value 2 or bigger]\n\n",
             minimum_value=2)
 
-        self.players = Players(self.NUMBER_OF_PLAYERS)
+        self.NUMBER_OF_AI = self.user_int_input_selecting(
+            input_text="Please select how many AI opponents will participate:\n-> ",
+            error_text="Incorrect input! [Expected integer with value 0 or bigger]\n\n",
+            minimum_value=0)
+
+        self.players = Players(self.NUMBER_OF_PLAYERS, self.NUMBER_OF_AI)
 
         while True:
 
@@ -192,4 +213,5 @@ class PlayTicTacToe:
         print("Thank you for playing !")
 
 
-PlayTicTacToe().run()
+if __name__ == "__main__":
+    PlayTicTacToe().run()

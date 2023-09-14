@@ -1,20 +1,29 @@
 class Players:
-    def __init__(self, players_count: int):
-        self.players_tuple = ()
-        self.players_ai_tuple = ()
-        self.create_and_set_player_list(players_count)
+    def __init__(self, players_count, ai_count):
+        self.players_count = players_count
+        self.ai_count = ai_count
+        self.human_players = ()
+        self.ai_players = ()
 
-    def create_and_set_player_list(self, players_count):
+        self.add_human_players()
+        self.add_ai_players()
+
+    def add_human_players(self):
+        self.human_players = self.set_players(players_count=self.players_count - self.ai_count, print_name="Player")
+
+    def add_ai_players(self):
+        self.ai_players = self.set_players(players_count=self.ai_count, print_name="AI")
+
+    def set_players(self, players_count, print_name):
         players_list = []
-        ai_list = []
 
         for player_numb in range(players_count):
 
             while True:
                 try:
-                    player_symbol = input(f"Player {player_numb + 1}, please select your symbol:\n-> ")
+                    player_symbol = input(f"Please select symbol for {print_name} {player_numb + 1}\n-> ")
 
-                    if player_symbol in players_list or len(player_symbol) != 1:
+                    if player_symbol in players_list or player_symbol in self.human_players or len(player_symbol) != 1:
                         raise ValueError
 
                     players_list.append(player_symbol)
@@ -26,5 +35,4 @@ class Players:
                         "Incorrect input! [Expected single Symbol that is not already in use from another player]\n\n")
                     continue
 
-            self.players_tuple = tuple(players_list)
-            self.players_ai_tuple = tuple(ai_list)
+        return players_list
