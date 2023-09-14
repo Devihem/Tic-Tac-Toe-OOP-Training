@@ -229,17 +229,17 @@ class PlayTicTacToe:
         self.welcome_text()
 
         self.SIZE_OF_GRID = self.user_int_input_selecting(
-            input_text="Please select Grid Size:\n-> ",
+            input_text="Please select the gaming board size [ 3 - More ]:\n-> : ",
             error_text="Incorrect input! [Expected integer with value 3 or bigger]\n\n",
             min_num=3)
 
         self.NUMBER_OF_PLAYERS = self.user_int_input_selecting(
-            input_text="Please select how many total players will participate:\n-> ",
+            input_text="Please select how many total players will participate [ 2 - More ]:\n-> : ",
             error_text="Incorrect input! [Expected integer with value 2 or bigger]\n\n",
             min_num=2)
 
         self.NUMBER_OF_AI = self.user_int_input_selecting(
-            input_text="Please select how many AI opponents will participate:\n-> ",
+            input_text=f"Please select how many AI opponents will participate [ 0 - {self.NUMBER_OF_PLAYERS} ]:\n-> : ",
             error_text="Incorrect input! [Expected integer between 0 and total players!]\n\n",
             max_num=self.NUMBER_OF_PLAYERS)
 
