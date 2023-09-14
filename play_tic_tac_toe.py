@@ -31,16 +31,19 @@ class PlayTicTacToe:
     def welcome_text():
         print("\n\n"
               "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-              "\n*   ______    ____   ______         ______    ___      ______         ______   ____     ______  *"
-              "\n*  /_  __/   /  _/  / ____/        /_  __/   /   |    / ____/        /_  __/  / __ \\   / ____/  *"
-              "\n*   / /      / /   / /              / /     / /| |   / /              / /    / / / /  / __/     *"
-              "\n*  / /     _/ /   / /___           / /     / ___ |  / /___           / /    / /_/ /  / /___     *"
-              "\n* /_/     /___/   \\____/          /_/     /_/  |_|  \\____/          /_/     \\____/  /_____/     *"
+              "\n*\033[32m   ______    ____   ______         ______    ___      ______         ______   ____     ______  \33[0m*"
+              "\n*\033[32m  /_  __/   /  _/  / ____/        /_  __/   /   |    / ____/        /_  __/  / __ \\   / ____/  \33[0m*"
+              "\n*\033[32m   / /      / /   / /              / /     / /| |   / /              / /    / / / /  / __/     \33[0m*"
+              "\n*\033[32m  / /     _/ /   / /___           / /     / ___ |  / /___           / /    / /_/ /  / /___     \33[0m*"
+              "\n*\033[32m /_/     /___/   \\____/          /_/     /_/  |_|  \\____/          /_/     \\____/  /_____/     \33[0m*"
               "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
               "\n\n")
 
+    # Staticmethod used for all user integer input values.  Receive min/max values and correspondent texts.
+    # Return Int Value in the needed parameters
     @staticmethod
     def user_int_input_selecting(input_text, error_text, min_num=0, max_num=float("inf")):
+
         while True:
             try:
                 value_size = int(input(input_text))
@@ -57,38 +60,50 @@ class PlayTicTacToe:
                 print(error_text)
                 continue
 
+    # Main method for going through the game phase.
     def playing_phase(self):
+
+        # If there is no more free blocks for next move the game is considerate as draw !
         max_moves = self.SIZE_OF_GRID ** 2
         made_moves = 0
 
+        # The list of all players ( Human and Ai ) is randomly shuffled. The players turn is based on the list order.
         all_players = self.players.human_players + self.players.ai_players
         random.shuffle(all_players)
 
         while True:
 
+            # Players are picked one after another in the random all players list.
             for player in all_players:
 
+                # Printing the gaming board in the terminal
                 self.board_print()
 
+                # Future option for AI turns ! Temporary the decision is randomized somewhere on free spot !
                 if player in self.players.ai_players:
                     row, col = self.ai_choose_location()
                 else:
                     row, col = self.human_choose_location(player)
 
+                # Placing the player token on the board
                 self.board[row][col] = player
 
+                # Increasing the made moves
                 made_moves += 1
 
+                # Winner condition check
                 if self.winner_check():
                     print(f"\n\n--------- We have a winner !---------\n"
                           f"     Player with symbol " + "\033[32m" + f"{player}" + "\033[0m" + " WIN !\n\n")
                     return
 
+                # Draw condition check
                 elif max_moves == made_moves:
                     print("\n\nNo more moves.\nGame is DRAW !\n\n")
 
                     return
 
+    # Using ASCII symbols and the grid size for different elements to represent the board in the terminal.
     def board_print(self):
         list_with_indexes_top = ['']
 
@@ -117,6 +132,7 @@ class PlayTicTacToe:
         # Bottom frame
         print('└──' + '──┴──' * self.SIZE_OF_GRID + '──┘\n')
 
+    # Ai - Location choosing
     def ai_choose_location(self):
         while True:
             row = random.randint(0, self.SIZE_OF_GRID - 1)
@@ -124,6 +140,7 @@ class PlayTicTacToe:
             if self.board[row][col] == "":
                 return row, col
 
+    # Human - Location choosing with try/expect loop for filtering the incorrect inputs.
     def human_choose_location(self, player):
 
         while True:
@@ -133,9 +150,12 @@ class PlayTicTacToe:
                     f"Select where you want to place your Token "
                     f"[" + "\033[32m" + f"{player}" + "\033[0m" + "] in format Row:Col !\n -> ").split(":")
 
+                # Four checks for proper input , if the input is incorrect raise ValueError and Continue to the loop
+                # Check-1 , If there is more than two values after the split
                 if len(player_pick_location) != 2:
                     raise ValueError
 
+                # Check-2 , if all elements are integers
                 for loc in player_pick_location:
                     for el in loc:
                         if not el.isdigit():
@@ -144,22 +164,27 @@ class PlayTicTacToe:
                 row = int(player_pick_location[0])
                 col = int(player_pick_location[1])
 
+                # Check-3, if all numbers are in the range of the board
                 if 0 < row <= self.SIZE_OF_GRID and 0 < col <= self.SIZE_OF_GRID:
                     row = row - 1
                     col = col - 1
                 else:
                     raise ValueError
 
+                # Check-4, if the token is placed on free place
                 if self.board[row][col] != "":
                     raise ValueError
 
+                # Return the row and col locations if all checks are passed
                 return row, col
 
             except ValueError:
                 print("Incorrect input! [Expected valid coordinates in format Row:Col where the block is free !]\n\n")
                 continue
 
+    # The method check for winner on the board.
     def winner_check(self):
+
         # Rows - Check
         for row in self.board:
             if row[0] != '' and all([True if el == row[0] else False for el in row[1:]]):
