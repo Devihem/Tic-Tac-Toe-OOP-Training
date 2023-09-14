@@ -24,12 +24,15 @@ class PlayTicTacToe:
               "\n\n")
 
     @staticmethod
-    def user_int_input_selecting(input_text, error_text, minimum_value):
+    def user_int_input_selecting(input_text, error_text, min_num=0, max_num=float("inf")):
         while True:
             try:
                 value_size = int(input(input_text))
 
-                if value_size < minimum_value:
+                if value_size < min_num:
+                    raise ValueError
+
+                if value_size > max_num:
                     raise ValueError
 
                 return value_size
@@ -187,17 +190,17 @@ class PlayTicTacToe:
         self.SIZE_OF_GRID = self.user_int_input_selecting(
             input_text="Please select Grid Size:\n-> ",
             error_text="Incorrect input! [Expected integer with value 3 or bigger]\n\n",
-            minimum_value=3)
+            min_num=3)
 
         self.NUMBER_OF_PLAYERS = self.user_int_input_selecting(
             input_text="Please select how many total players will participate:\n-> ",
             error_text="Incorrect input! [Expected integer with value 2 or bigger]\n\n",
-            minimum_value=2)
+            min_num=2)
 
         self.NUMBER_OF_AI = self.user_int_input_selecting(
             input_text="Please select how many AI opponents will participate:\n-> ",
-            error_text="Incorrect input! [Expected integer with value 0 or bigger]\n\n",
-            minimum_value=0)
+            error_text="Incorrect input! [Expected integer between 0 and total players!]\n\n",
+            max_num=self.NUMBER_OF_PLAYERS)
 
         self.players = Players(self.NUMBER_OF_PLAYERS, self.NUMBER_OF_AI)
 
