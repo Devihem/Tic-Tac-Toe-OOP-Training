@@ -1,3 +1,19 @@
+"""
+Project: Tic-Tac-Toe OOP Training
+File: play_tic_tac_toe.py - main
+Author: Ivaylo Stoyanov - Devihem
+
+This is a basic project in python for the game Tic-Tac-Toe.
+The idea of this the project is to be done with OOP methods.There are some additional
+options added like custom board size , custom players size , gaming board visualisation in terminal and option for new
+game. For better experience all inputs are handled to stay repetitive until a proper input is received.
+
+Players take turns placing their tokens on the board by selecting coordinates in format Row:Col .
+If a player has a row, column, or diagonal filled with his symbol the player wins.
+If no player wins and the board is full, the game is considered a draw.
+
+"""
+
 import random
 from players import Players
 
@@ -14,13 +30,13 @@ class PlayTicTacToe:
     @staticmethod
     def welcome_text():
         print("\n\n"
-              "\n---------------------------------Welcome-to-my-mini-project----------------------------------"
-              "\n   ______    ____   ______         ______    ___      ______         ______   ____     ______"
-              "\n  /_  __/   /  _/  / ____/        /_  __/   /   |    / ____/        /_  __/  / __ \\   / ____/"
-              "\n   / /      / /   / /              / /     / /| |   / /              / /    / / / /  / __/   "
-              "\n  / /     _/ /   / /___           / /     / ___ |  / /___           / /    / /_/ /  / /___   "
-              "\n /_/     /___/   \\____/          /_/     /_/  |_|  \\____/          /_/     \\____/  /_____/  "
-              "\n----------------------------------------------------------------------------------------------"
+              "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+              "\n*   ______    ____   ______         ______    ___      ______         ______   ____     ______  *"
+              "\n*  /_  __/   /  _/  / ____/        /_  __/   /   |    / ____/        /_  __/  / __ \\   / ____/  *"
+              "\n*   / /      / /   / /              / /     / /| |   / /              / /    / / / /  / __/     *"
+              "\n*  / /     _/ /   / /___           / /     / ___ |  / /___           / /    / /_/ /  / /___     *"
+              "\n* /_/     /___/   \\____/          /_/     /_/  |_|  \\____/          /_/     \\____/  /_____/     *"
+              "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
               "\n\n")
 
     @staticmethod
