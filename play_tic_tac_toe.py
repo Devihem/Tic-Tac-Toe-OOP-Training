@@ -25,7 +25,7 @@ class PlayTicTacToe:
     NUMBER_OF_AI = 0
 
     def __init__(self):
-        self.players = None  # obj
+        self.players = Players()  # obj
         self.board = GamingBoard()  # obj
 
     @staticmethod
@@ -80,7 +80,7 @@ class PlayTicTacToe:
                 if player in self.players.ai_players:
                     row, col = self.ai_choose_location()
                 else:
-                    row, col = self.human_choose_location(player)
+                    row, col = [int(i) - 1 for i in self.human_choose_location(player)]
 
                 # Placing the player token on the board
                 self.board.place_token(row, col, player)
@@ -88,14 +88,14 @@ class PlayTicTacToe:
                 # decrease the value of total free cells
                 self.board.free_cells -= 1
 
-                # The method check for winner on the board.
+                # The method check for winner.
                 if self.board.winner_check():
                     print(f"\n\n--------- We have a winner !---------\n"
                           f"     Player with symbol " + "\033[32m" + f"{player}" + "\033[0m" + " WIN !\n\n")
                     return
 
-                # If there is no more free cells for next move the game is considerate as draw !
-                elif 0 == self.board.free_cells:
+                # The method check if the game is DRAW.
+                elif self.board.draw_check():
                     print("\n\nNo more moves.\nGame is DRAW !\n\n")
                     return
 
@@ -112,43 +112,15 @@ class PlayTicTacToe:
     def human_choose_location(self, player):
 
         while True:
+            player_pick_location = input(
+                f"Select where you want to place your Token "
+                f"[" + "\033[32m" + f"{player}" + "\033[0m" + "] in format Row:Col !\n -> ").split(":")
 
-            try:
-                player_pick_location = input(
-                    f"Select where you want to place your Token "
-                    f"[" + "\033[32m" + f"{player}" + "\033[0m" + "] in format Row:Col !\n -> ").split(":")
-
-                # Four checks for proper input , if the input is incorrect raise ValueError and Continue to the loop
-                # Check-1 , If there is more than two values after the split
-                if len(player_pick_location) != 2:
-                    raise ValueError
-
-                # Check-2 , if all elements are integers
-                for loc in player_pick_location:
-                    for el in loc:
-                        if not el.isdigit():
-                            raise ValueError
-
-                row = int(player_pick_location[0])
-                col = int(player_pick_location[1])
-
-                # Check-3, if all numbers are in the range of the board
-                if 0 < row <= self.SIZE_OF_GRID and 0 < col <= self.SIZE_OF_GRID:
-                    row = row - 1
-                    col = col - 1
-                else:
-                    raise ValueError
-
-                # Check-4, if the token is placed on free place
-                if self.board.board[row][col] != "":
-                    raise ValueError
+            # Four checks for proper input , if the input is incorrect raise ValueError and Continue to the loop
+            if self.board.check_if_coordinates_are_valid(player_pick_location):
 
                 # Return the row and col locations if all checks are passed
-                return row, col
-
-            except ValueError:
-                print("Incorrect input! [Expected valid coordinates in format Row:Col where the block is free !]\n\n")
-                continue
+                return player_pick_location
 
     @staticmethod
     def another_game_select():
@@ -185,7 +157,8 @@ class PlayTicTacToe:
             error_text="Incorrect input! [Expected integer between 0 and total players!]\n\n",
             max_num=self.NUMBER_OF_PLAYERS)
 
-        self.players = Players(self.NUMBER_OF_PLAYERS, self.NUMBER_OF_AI)
+        # Create and fill the players list
+        self.players.create_players_list(self.NUMBER_OF_PLAYERS, self.NUMBER_OF_AI)
 
         while True:
 

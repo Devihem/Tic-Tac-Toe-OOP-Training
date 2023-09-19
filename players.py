@@ -1,10 +1,13 @@
 class Players:
-    def __init__(self, players_count, ai_count):
-        self.players_count = players_count
-        self.ai_count = ai_count
+    def __init__(self):
+        self.players_count = 0
+        self.ai_count = 0
         self.human_players = ()
         self.ai_players = ()
 
+    def create_players_list(self, number_of_players, number_of_ai):
+        self.players_count = number_of_players
+        self.ai_count = number_of_ai
         self.add_human_players()
         self.add_ai_players()
 
