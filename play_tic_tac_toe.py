@@ -28,38 +28,40 @@ class PlayTicTacToe:
         self.players = Players()  # obj
         self.board = GamingBoard()  # obj
 
-    @staticmethod
-    def welcome_text():
-        print("\n\n"
-              "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-              "\n*\033[32m   ______    ____   ______         ______    ___      ______         ______   ____     ______  \33[0m*"
-              "\n*\033[32m  /_  __/   /  _/  / ____/        /_  __/   /   |    / ____/        /_  __/  / __ \\   / ____/  \33[0m*"
-              "\n*\033[32m   / /      / /   / /              / /     / /| |   / /              / /    / / / /  / __/     \33[0m*"
-              "\n*\033[32m  / /     _/ /   / /___           / /     / ___ |  / /___           / /    / /_/ /  / /___     \33[0m*"
-              "\n*\033[32m /_/     /___/   \\____/          /_/     /_/  |_|  \\____/          /_/     \\____/  /_____/     \33[0m*"
-              "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-              "\n\n")
+    # The method set all class constants and parameters based on user input.
+    def run(self):
+        self.welcome_text()
 
-    # Staticmethod used for all user integer input values.  Receive min/max values and correspondent texts.
-    # Return Int Value in the needed parameters
-    @staticmethod
-    def user_int_input_selecting(input_text, error_text, min_num=0, max_num=float("inf")):
+        self.SIZE_OF_GRID = self.user_int_input_selecting(
+            input_text="Please select the gaming board size [ 3 - More ]:\n-> : ",
+            error_text="Incorrect input! [Expected integer with value 3 or bigger]\n\n",
+            min_num=3)
+
+        self.NUMBER_OF_PLAYERS = self.user_int_input_selecting(
+            input_text="Please select how many total players will participate [ 2 - More ]:\n-> : ",
+            error_text="Incorrect input! [Expected integer with value 2 or bigger]\n\n",
+            min_num=2)
+
+        self.NUMBER_OF_AI = self.user_int_input_selecting(
+            input_text=f"Please select how many AI opponents will participate [ 0 - {self.NUMBER_OF_PLAYERS} ]:\n-> : ",
+            error_text="Incorrect input! [Expected integer between 0 and total players!]\n\n",
+            max_num=self.NUMBER_OF_PLAYERS)
+
+        # PLAYERS . Create and fill the players list
+        self.players.create_players_list(self.NUMBER_OF_PLAYERS, self.NUMBER_OF_AI)
 
         while True:
-            try:
-                value_size = int(input(input_text))
 
-                if value_size < min_num:
-                    raise ValueError
+            #  BOARD . Resize the board based on the Grid Size input ( Create new empty board )
+            self.board.create_empty_board_grid(self.SIZE_OF_GRID)
 
-                if value_size > max_num:
-                    raise ValueError
+            # The method
+            self.playing_phase()
 
-                return value_size
+            if not self.another_game_select():
+                break
 
-            except ValueError:
-                print(error_text)
-                continue
+        print("Thank you for playing !")
 
     # Main method for going through the game phase.
     def playing_phase(self):
@@ -99,6 +101,39 @@ class PlayTicTacToe:
                     print("\n\nNo more moves.\nGame is DRAW !\n\n")
                     return
 
+    @staticmethod
+    def welcome_text():
+        print("\n\n"
+              "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+              "\n*\033[32m   ______    ____   ______         ______    ___      ______         ______   ____     ______  \33[0m*"
+              "\n*\033[32m  /_  __/   /  _/  / ____/        /_  __/   /   |    / ____/        /_  __/  / __ \\   / ____/  \33[0m*"
+              "\n*\033[32m   / /      / /   / /              / /     / /| |   / /              / /    / / / /  / __/     \33[0m*"
+              "\n*\033[32m  / /     _/ /   / /___           / /     / ___ |  / /___           / /    / /_/ /  / /___     \33[0m*"
+              "\n*\033[32m /_/     /___/   \\____/          /_/     /_/  |_|  \\____/          /_/     \\____/  /_____/     \33[0m*"
+              "\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+              "\n\n")
+
+    # Staticmethod used for all user integer input values.  Receive min/max values and correspondent texts.
+    # Return Int Value in the needed parameters
+    @staticmethod
+    def user_int_input_selecting(input_text, error_text, min_num=0, max_num=float("inf")):
+
+        while True:
+            try:
+                value_size = int(input(input_text))
+
+                if value_size < min_num:
+                    raise ValueError
+
+                if value_size > max_num:
+                    raise ValueError
+
+                return value_size
+
+            except ValueError:
+                print(error_text)
+                continue
+
     # Ai - Location choosing
     def ai_choose_location(self):
         while True:
@@ -118,7 +153,6 @@ class PlayTicTacToe:
 
             # Four checks for proper input , if the input is incorrect raise ValueError and Continue to the loop
             if self.board.check_if_coordinates_are_valid(player_pick_location):
-
                 # Return the row and col locations if all checks are passed
                 return player_pick_location
 
@@ -138,39 +172,6 @@ class PlayTicTacToe:
             except ValueError:
                 print("Incorrect input! [Expected Y or N]\n\n")
                 continue
-
-    def run(self):
-        self.welcome_text()
-
-        self.SIZE_OF_GRID = self.user_int_input_selecting(
-            input_text="Please select the gaming board size [ 3 - More ]:\n-> : ",
-            error_text="Incorrect input! [Expected integer with value 3 or bigger]\n\n",
-            min_num=3)
-
-        self.NUMBER_OF_PLAYERS = self.user_int_input_selecting(
-            input_text="Please select how many total players will participate [ 2 - More ]:\n-> : ",
-            error_text="Incorrect input! [Expected integer with value 2 or bigger]\n\n",
-            min_num=2)
-
-        self.NUMBER_OF_AI = self.user_int_input_selecting(
-            input_text=f"Please select how many AI opponents will participate [ 0 - {self.NUMBER_OF_PLAYERS} ]:\n-> : ",
-            error_text="Incorrect input! [Expected integer between 0 and total players!]\n\n",
-            max_num=self.NUMBER_OF_PLAYERS)
-
-        # Create and fill the players list
-        self.players.create_players_list(self.NUMBER_OF_PLAYERS, self.NUMBER_OF_AI)
-
-        while True:
-
-            # Resize the board based on the Grid Size input ( Create new clear board )
-            self.board.create_empty_board_grid(self.SIZE_OF_GRID)
-
-            self.playing_phase()
-
-            if not self.another_game_select():
-                break
-
-        print("Thank you for playing !")
 
 
 if __name__ == "__main__":
