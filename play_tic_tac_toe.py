@@ -32,30 +32,20 @@ class PlayTicTacToe:
     def run(self):
         self.welcome_text()
 
-        self.SIZE_OF_GRID = self.user_int_input_selecting(
-            input_text="Please select the gaming board size [ 3 - More ]:\n-> : ",
-            error_text="Incorrect input! [Expected integer with value 3 or bigger]\n\n",
-            min_num=3)
+        self.set_constants()
 
-        self.NUMBER_OF_PLAYERS = self.user_int_input_selecting(
-            input_text="Please select how many total players will participate [ 2 - More ]:\n-> : ",
-            error_text="Incorrect input! [Expected integer with value 2 or bigger]\n\n",
-            min_num=2)
-
-        self.NUMBER_OF_AI = self.user_int_input_selecting(
-            input_text=f"Please select how many AI opponents will participate [ 0 - {self.NUMBER_OF_PLAYERS} ]:\n-> : ",
-            error_text="Incorrect input! [Expected integer between 0 and total players!]\n\n",
-            max_num=self.NUMBER_OF_PLAYERS)
-
-        # PLAYERS . Create and fill the players list
+        # UPDATE PLAYERS . Create and fill the players list
         self.players.create_players_list(self.NUMBER_OF_PLAYERS, self.NUMBER_OF_AI)
 
         while True:
 
-            #  BOARD . Resize the board based on the Grid Size input ( Create new empty board )
+            #  UPDATE BOARD . Resize the board based on the Grid Size input ( Create new empty board )
             self.board.create_empty_board_grid(self.SIZE_OF_GRID)
 
-            # The method
+            #  Shuffle the player order before any new game
+            self.players.all_players_shuffle()
+
+            # Starting the playing phase
             self.playing_phase()
 
             if not self.another_game_select():
@@ -63,17 +53,13 @@ class PlayTicTacToe:
 
         print("Thank you for playing !")
 
-    # Main method for going through the game phase.
+    # Main method for going through the game logic.
     def playing_phase(self):
-
-        # The list of all players ( Human and Ai ) is randomly shuffled. The players turn is based on the list order.
-        all_players = self.players.human_players + self.players.ai_players
-        random.shuffle(all_players)
 
         while True:
 
-            # Players are picked one after another in the random all players list.
-            for player in all_players:
+            # Players are picked one after another in from list with all players ( shuffled before any new game ).
+            for player in self.players:
 
                 # Printing the gaming board in the terminal
                 self.board.terminal_print()
@@ -101,6 +87,21 @@ class PlayTicTacToe:
                     print("\n\nNo more moves.\nGame is DRAW !\n\n")
                     return
 
+    def set_constants(self):
+        self.SIZE_OF_GRID = self.user_int_input_selecting(
+            input_text="Please select the gaming board size [ 3 - More ]:\n-> : ",
+            error_text="Incorrect input! [Expected integer with value 3 or bigger]\n\n",
+            min_num=3)
+
+        self.NUMBER_OF_PLAYERS = self.user_int_input_selecting(
+            input_text="Please select how many total players will participate [ 2 - More ]:\n-> : ",
+            error_text="Incorrect input! [Expected integer with value 2 or bigger]\n\n",
+            min_num=2)
+
+        self.NUMBER_OF_AI = self.user_int_input_selecting(
+            input_text=f"Please select how many AI opponents will participate [ 0 - {self.NUMBER_OF_PLAYERS} ]:\n-> : ",
+            error_text="Incorrect input! [Expected integer between 0 and total players!]\n\n",
+            max_num=self.NUMBER_OF_PLAYERS)
     @staticmethod
     def welcome_text():
         print("\n\n"

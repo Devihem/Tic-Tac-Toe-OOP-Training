@@ -1,3 +1,6 @@
+from random import shuffle
+
+
 class Players:
     def __init__(self):
         self.players_count = 0
@@ -39,3 +42,21 @@ class Players:
                     continue
 
         return players_list
+
+    # The list of all players ( Human and Ai ) is randomly shuffled. The players turn is based on the list order.
+
+    def all_players_shuffle(self):
+        self.__all_players = list(self.human_players + self.ai_players)
+        shuffle(self.__all_players)
+
+    def __iter__(self):
+        self.__counter = -1
+        return self
+
+    def __next__(self):
+        self.__counter += 1
+
+        if self.__counter == len(self.__all_players):
+            raise StopIteration
+
+        return self.__all_players[self.__counter]
