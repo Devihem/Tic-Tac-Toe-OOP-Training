@@ -3,7 +3,7 @@
 📑 **About:**
 
 *This is a basic project in python for the game Tic-Tac-Toe.
-The idea of this the project is to be done with OOP methods.There are some additional
+The idea of this the project is to be done with OOP construction.There are some additional
 options added like custom board size , custom players size , gaming board visualisation in terminal and option for new
 game. For better experience all inputs are handled to stay repetitive until a proper input is received.*
 

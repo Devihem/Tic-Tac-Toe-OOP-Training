@@ -4,7 +4,7 @@ File: play_tic_tac_toe.py - main
 Author: Ivaylo Stoyanov - Devihem
 
 This is a basic project in python for the game Tic-Tac-Toe.
-The idea of this the project is to be done with OOP methods.There are some additional
+The idea of this the project is to be done with OOP construction.There are some additional
 options added like custom board size , custom players size , gaming board visualisation in terminal and option for new
 game. For better experience all inputs are handled to stay repetitive until a proper input is received.
 
@@ -28,10 +28,13 @@ class PlayTicTacToe:
         self.players = Players()  # obj
         self.board = GamingBoard()  # obj
 
-    # The method set all class constants and parameters based on user input.
+    # The method set all class constants and parameters based on user input and give the option for repeat the game.
     def run(self):
+
+        # ASCII Welcome text printed in terminal
         self.welcome_text()
 
+        # Set the GRID_SIZE , HUMAN and AI players count. ( Using user input )
         self.set_constants()
 
         # UPDATE PLAYERS . Create and fill the players list
@@ -48,6 +51,7 @@ class PlayTicTacToe:
             # Starting the playing phase
             self.playing_phase()
 
+            # Giving prompt for new game
             if not self.another_game_select():
                 break
 
@@ -78,13 +82,16 @@ class PlayTicTacToe:
 
                 # The method check for winner.
                 if self.board.winner_check():
-                    print(f"\n\n--------- We have a winner !---------\n"
-                          f"     Player with symbol " + "\033[32m" + f"{player}" + "\033[0m" + " WIN !\n\n")
+                    print(f"\n\n* * * * * * No More Moves * * * * * *\n"
+                          f"*        This round is DRAW         *\n"
+                          f"* * * * * * * * * * * * * * * * * * * \n\n")
                     return
 
                 # The method check if the game is DRAW.
                 elif self.board.draw_check():
-                    print("\n\nNo more moves.\nGame is DRAW !\n\n")
+                    print(f"\n\n* * * * * No More Moves * * * * *\n"
+                          f"*     This round is DRAW      *\n"
+                          f"* * * * * * * * * * * * * * * * * * * \n\n")
                     return
 
     def set_constants(self):
@@ -102,6 +109,7 @@ class PlayTicTacToe:
             input_text=f"Please select how many AI opponents will participate [ 0 - {self.NUMBER_OF_PLAYERS} ]:\n-> : ",
             error_text="Incorrect input! [Expected integer between 0 and total players!]\n\n",
             max_num=self.NUMBER_OF_PLAYERS)
+
     @staticmethod
     def welcome_text():
         print("\n\n"
