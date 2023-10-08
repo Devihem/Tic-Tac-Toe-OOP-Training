@@ -28,7 +28,7 @@ class PlayTicTacToe:
     def __init__(self):
         self.players = Players()  # obj
         self.board = GamingBoard()  # obj
-        self.AI_enemy = AiEnemy(self.board)  # obj
+        self.AI_enemy = AiEnemy(GamingBoard())  # obj
 
     # The method set all class constants and parameters based on user input and give the option for repeat the game.
     def run(self):
@@ -73,9 +73,12 @@ class PlayTicTacToe:
                 # Future option for AI turns ! Temporary the decision is randomized somewhere on free spot !
                 if player in self.players.ai_players:
 
+                    # TODO fix the player listy
+
                     # self.AI_enemy.update_board(self.board.board, self.SIZE_OF_GRID)
-                    self.AI_enemy.board = self.board
-                    row, col = self.AI_enemy.ai_choose_location(player, self.players.human_players + self.players.ai_players)
+                    self.AI_enemy.update( self.board.board, self.SIZE_OF_GRID)
+                    row, col = self.AI_enemy.ai_choose_location(player,
+                                                                self.players.human_players + self.players.ai_players)
 
                 else:
                     row, col = [int(i) - 1 for i in self.human_choose_location(player)]
@@ -97,31 +100,31 @@ class PlayTicTacToe:
                 # The method check if the game is DRAW.
                 elif self.board.draw_check():
                     print(f"\n\n* * * * * No More Moves * * * * *\n"
-                          f"*     This round is DRAW        *\n"
+                          f"*    \033[34m This round is DRAW\33[0m        *\n"
                           f"* * * * * * * * * * * * * * * * * \n\n")
                     return
 
     def set_constants(self):
-        self.SIZE_OF_GRID = 4
-        self.NUMBER_OF_PLAYERS = 2
-        self.NUMBER_OF_AI = 2
 
-        # TODO remove comment
+        # FOR TEST ONLY
+        # self.SIZE_OF_GRID = 4
+        # self.NUMBER_OF_PLAYERS = 2
+        # self.NUMBER_OF_AI = 2
 
-        # self.SIZE_OF_GRID = self.user_int_input_selecting(
-        #     input_text="Please select the gaming board size [ 3 - More ]:\n-> : ",
-        #     error_text="Incorrect input! [Expected integer with value 3 or bigger]\n\n",
-        #     min_num=3)
-        #
-        # self.NUMBER_OF_PLAYERS = self.user_int_input_selecting(
-        #     input_text="Please select how many total players will participate [ 2 - More ]:\n-> : ",
-        #     error_text="Incorrect input! [Expected integer with value 2 or bigger]\n\n",
-        #     min_num=2)
-        #
-        # self.NUMBER_OF_AI = self.user_int_input_selecting(
-        #     input_text=f"Please select how many AI opponents will participate [ 0 - {self.NUMBER_OF_PLAYERS} ]:\n-> : ",
-        #     error_text="Incorrect input! [Expected integer between 0 and total players!]\n\n",
-        #     max_num=self.NUMBER_OF_PLAYERS)
+        self.SIZE_OF_GRID = self.user_int_input_selecting(
+            input_text="Please select the gaming board size [ 3 - More ]:\n-> : ",
+            error_text="Incorrect input! [Expected integer with value 3 or bigger]\n\n",
+            min_num=3)
+
+        self.NUMBER_OF_PLAYERS = self.user_int_input_selecting(
+            input_text="Please select how many total players will participate [ 2 - More ]:\n-> : ",
+            error_text="Incorrect input! [Expected integer with value 2 or bigger]\n\n",
+            min_num=2)
+
+        self.NUMBER_OF_AI = self.user_int_input_selecting(
+            input_text=f"Please select how many AI opponents will participate [ 0 - {self.NUMBER_OF_PLAYERS} ]:\n-> : ",
+            error_text="Incorrect input! [Expected integer between 0 and total players!]\n\n",
+            max_num=self.NUMBER_OF_PLAYERS)
 
     @staticmethod
     def welcome_text():

@@ -17,10 +17,8 @@ class Players:
     def add_human_players(self):
         self.human_players = self.set_players(players_count=self.players_count - self.ai_count, print_name="Player")
 
-    # TODO  Remove comment
     def add_ai_players(self):
-        self.ai_players = ['X', 'O']
-        # self.ai_players = self.set_players(players_count=self.ai_count, print_name="AI")
+        self.ai_players = self.set_players(players_count=self.ai_count, print_name="AI")
 
     def set_players(self, players_count, print_name):
         players_list = []
