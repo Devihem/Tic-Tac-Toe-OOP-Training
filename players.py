@@ -7,6 +7,7 @@ class Players:
         self.ai_count = 0
         self.human_players = ()
         self.ai_players = ()
+        self.__all_players = []
 
     def create_players_list(self, number_of_players, number_of_ai):
         self.players_count = number_of_players
@@ -59,3 +60,6 @@ class Players:
         if self.__counter == len(self.__all_players):
             raise StopIteration
         return self.__all_players[self.__counter]
+
+    def all_players_list(self):
+        return self.__all_players

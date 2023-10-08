@@ -73,12 +73,10 @@ class PlayTicTacToe:
                 # Future option for AI turns ! Temporary the decision is randomized somewhere on free spot !
                 if player in self.players.ai_players:
 
-                    # TODO fix the player listy
-
                     # self.AI_enemy.update_board(self.board.board, self.SIZE_OF_GRID)
-                    self.AI_enemy.update( self.board.board, self.SIZE_OF_GRID)
-                    row, col = self.AI_enemy.ai_choose_location(player,
-                                                                self.players.human_players + self.players.ai_players)
+                    self.AI_enemy.update(self.board.board, self.SIZE_OF_GRID)
+
+                    row, col = self.AI_enemy.ai_choose_location(player, self.players.all_players_list())
 
                 else:
                     row, col = [int(i) - 1 for i in self.human_choose_location(player)]
@@ -105,11 +103,6 @@ class PlayTicTacToe:
                     return
 
     def set_constants(self):
-
-        # FOR TEST ONLY
-        # self.SIZE_OF_GRID = 4
-        # self.NUMBER_OF_PLAYERS = 2
-        # self.NUMBER_OF_AI = 2
 
         self.SIZE_OF_GRID = self.user_int_input_selecting(
             input_text="Please select the gaming board size [ 3 - More ]:\n-> : ",
@@ -177,6 +170,7 @@ class PlayTicTacToe:
                 f"[" + "\033[32m" + f"{player}" + "\033[0m" + "] in format Row:Col !\n -> ").split(":")
 
             # TODO - board must check only for coordinates. Other checks stay here !
+            # The same check is used in AI Enemy ?  Q ?
 
             # Four checks for proper input , if the input is incorrect raise ValueError and Continue to the loop
             if self.board.check_if_coordinates_are_valid(player_pick_location):
