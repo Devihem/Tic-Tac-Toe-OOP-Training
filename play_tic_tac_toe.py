@@ -17,6 +17,7 @@ If no player wins and the board is full, the game is considered a draw.
 import random
 from players import Players
 from gaming_board import GamingBoard
+from ai_enemy import AiEnemy
 
 
 class PlayTicTacToe:
@@ -27,6 +28,7 @@ class PlayTicTacToe:
     def __init__(self):
         self.players = Players()  # obj
         self.board = GamingBoard()  # obj
+        self.AI_enemy = AiEnemy(self.board)  # obj
 
     # The method set all class constants and parameters based on user input and give the option for repeat the game.
     def run(self):
@@ -48,7 +50,7 @@ class PlayTicTacToe:
             #  Shuffle the player order before any new game
             self.players.all_players_shuffle()
 
-            # Starting the playing phase
+            # PLAYING PHASE
             self.playing_phase()
 
             # Giving prompt for new game
@@ -70,7 +72,11 @@ class PlayTicTacToe:
 
                 # Future option for AI turns ! Temporary the decision is randomized somewhere on free spot !
                 if player in self.players.ai_players:
-                    row, col = self.ai_choose_location()
+
+                    # self.AI_enemy.update_board(self.board.board, self.SIZE_OF_GRID)
+                    self.AI_enemy.board = self.board
+                    row, col = self.AI_enemy.ai_choose_location(player, self.players.human_players + self.players.ai_players)
+
                 else:
                     row, col = [int(i) - 1 for i in self.human_choose_location(player)]
 
@@ -82,33 +88,40 @@ class PlayTicTacToe:
 
                 # The method check for winner.
                 if self.board.winner_check():
-                    print(f"\n\n* * * * * * No More Moves * * * * * *\n"
-                          f"*        This round is DRAW         *\n"
-                          f"* * * * * * * * * * * * * * * * * * * \n\n")
+                    print(f"\n\n* * * * We Have A Winner  * * * * *\n"
+                          f"*  \033[32m Congratulations Player: {player} !\33[0m   *\n"
+                          f"* * * * * * * * * * * * * * * * * * \n\n")
+
                     return
 
                 # The method check if the game is DRAW.
                 elif self.board.draw_check():
                     print(f"\n\n* * * * * No More Moves * * * * *\n"
-                          f"*     This round is DRAW      *\n"
-                          f"* * * * * * * * * * * * * * * * * * * \n\n")
+                          f"*     This round is DRAW        *\n"
+                          f"* * * * * * * * * * * * * * * * * \n\n")
                     return
 
     def set_constants(self):
-        self.SIZE_OF_GRID = self.user_int_input_selecting(
-            input_text="Please select the gaming board size [ 3 - More ]:\n-> : ",
-            error_text="Incorrect input! [Expected integer with value 3 or bigger]\n\n",
-            min_num=3)
+        self.SIZE_OF_GRID = 4
+        self.NUMBER_OF_PLAYERS = 2
+        self.NUMBER_OF_AI = 2
 
-        self.NUMBER_OF_PLAYERS = self.user_int_input_selecting(
-            input_text="Please select how many total players will participate [ 2 - More ]:\n-> : ",
-            error_text="Incorrect input! [Expected integer with value 2 or bigger]\n\n",
-            min_num=2)
+        # TODO remove comment
 
-        self.NUMBER_OF_AI = self.user_int_input_selecting(
-            input_text=f"Please select how many AI opponents will participate [ 0 - {self.NUMBER_OF_PLAYERS} ]:\n-> : ",
-            error_text="Incorrect input! [Expected integer between 0 and total players!]\n\n",
-            max_num=self.NUMBER_OF_PLAYERS)
+        # self.SIZE_OF_GRID = self.user_int_input_selecting(
+        #     input_text="Please select the gaming board size [ 3 - More ]:\n-> : ",
+        #     error_text="Incorrect input! [Expected integer with value 3 or bigger]\n\n",
+        #     min_num=3)
+        #
+        # self.NUMBER_OF_PLAYERS = self.user_int_input_selecting(
+        #     input_text="Please select how many total players will participate [ 2 - More ]:\n-> : ",
+        #     error_text="Incorrect input! [Expected integer with value 2 or bigger]\n\n",
+        #     min_num=2)
+        #
+        # self.NUMBER_OF_AI = self.user_int_input_selecting(
+        #     input_text=f"Please select how many AI opponents will participate [ 0 - {self.NUMBER_OF_PLAYERS} ]:\n-> : ",
+        #     error_text="Incorrect input! [Expected integer between 0 and total players!]\n\n",
+        #     max_num=self.NUMBER_OF_PLAYERS)
 
     @staticmethod
     def welcome_text():
@@ -159,6 +172,8 @@ class PlayTicTacToe:
             player_pick_location = input(
                 f"Select where you want to place your Token "
                 f"[" + "\033[32m" + f"{player}" + "\033[0m" + "] in format Row:Col !\n -> ").split(":")
+
+            # TODO - board must check only for coordinates. Other checks stay here !
 
             # Four checks for proper input , if the input is incorrect raise ValueError and Continue to the loop
             if self.board.check_if_coordinates_are_valid(player_pick_location):

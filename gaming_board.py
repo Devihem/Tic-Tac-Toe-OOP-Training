@@ -44,6 +44,10 @@ class GamingBoard:
         if self.free_cells == 0:
             return True
 
+        # TODO
+        # return not self.free_cells
+        # коплиране ?
+
     def check_if_coordinates_are_valid(self, player_pick_location):
 
         try:
