@@ -33,7 +33,7 @@ If no player wins and the board is full, the game is considered a draw.*
 
 ‎ ‎
 
-🖥️  **Preview :**
+🖥️  **Preview & Link : [[ CLICK HERE](https://replit.com/@IvayloStoyanov/Tic-Tac-Toe-OOP-Training?v=1) 🕹️ ]** 
 
 <img width="70%" align="center" alt="Tic Tac Toe Photo" src="https://raw.githubusercontent.com/Devihem/Tic-Tac-Toe-OOP-Training/master/sceenshots_demo/Screenshot1.png" />
 <img width="70%" align="center" alt="Tic Tac Toe Photo" src="https://raw.githubusercontent.com/Devihem/Tic-Tac-Toe-OOP-Training/master/sceenshots_demo/Screenshot2.png" />
