@@ -36,6 +36,7 @@ class AiEnemy:
 
             # Variable to store the location of first move made
             first_move_row_col = ''
+
             while True:
 
                 # Take the symbol of the current player based on player_index
@@ -84,3 +85,4 @@ class AiEnemy:
                   for row in range(self.board.size_of_grid)
                   for column in range(self.board.size_of_grid) if self.original_board_matrix[row][column] == '']
         return result
+
